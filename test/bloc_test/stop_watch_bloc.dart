@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_stopwatch/domain/bloc/bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -68,21 +69,20 @@ void main() {
       ],
     );
 
-    /// Using test here instead of blocTest
-    /// to check the length of lap time and
-    /// previous lap time matches the last lap time
-    ///
-    /// the tests would be flaky due to the nature of
-    /// [Stopwatch]
     test('lap stopwatch', () async {
-      final bloc = StopWatchBloc();
-      bloc.add(const StartStopWatch());
-      bloc.add(const LapStopWatch());
+      fakeAsync((async) {
+        final bloc = StopWatchBloc();
+        bloc.add(const StartStopWatch());
 
-      //Future.delayed is for the lap to register on the state
-      await Future.delayed(const Duration());
-      expect(bloc.state.lapTimes.length, equals(1));
-      expect(bloc.state.previousLapTime, equals(bloc.state.lapTimes.last));
+        async.elapse(const Duration(milliseconds: 100));
+        bloc.add(const LapStopWatch());
+        async.elapse(const Duration(milliseconds: 100));
+        bloc.add(const LapStopWatch());
+        async.elapse(const Duration(milliseconds: 100));
+
+        expect(bloc.state.lapTimes, equals([100, 100]));
+        expect(bloc.state.previousLapTime, equals(200));
+      });
     });
 
     blocTest(

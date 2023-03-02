@@ -23,6 +23,9 @@ class AnimatedFeedbackButton extends StatefulWidget {
 
 class _AnimatedFeedbackButtonState extends State<AnimatedFeedbackButton> {
   bool _pressed = false;
+
+  final Duration animationDuration = const Duration(milliseconds: 150);
+  final Cubic curve = Curves.easeOut;
   @override
   Widget build(BuildContext context) {
     double baseDimension = 90;
@@ -47,8 +50,8 @@ class _AnimatedFeedbackButtonState extends State<AnimatedFeedbackButton> {
     return AnimatedContainer(
       width: dimension,
       height: dimension,
-      duration: const Duration(milliseconds: 150),
-      curve: Curves.easeOut,
+      duration: animationDuration,
+      curve: curve,
       decoration: BoxDecoration(
           color:
               _pressed ? darkenColor(widget.buttonColor) : widget.buttonColor,
@@ -59,15 +62,23 @@ class _AnimatedFeedbackButtonState extends State<AnimatedFeedbackButton> {
     );
   }
 
-  Text buildButtonText() {
-    return Text(
-      widget.buttonText,
-      style: Theme.of(context).textTheme.button!.copyWith(
-            color: widget.onPressed == null
-                ? widget.disabledTextColor
-                : widget.textColor,
-          ),
+  Widget buildButtonText() {
+    return AnimatedDefaultTextStyle(
+      curve: curve,
+      style: buildTextStyle(),
+      duration: animationDuration,
+      child: Text(
+        widget.buttonText,
+      ),
     );
+  }
+
+  TextStyle buildTextStyle() {
+    return Theme.of(context).textTheme.button!.copyWith(
+          color: widget.onPressed == null
+              ? widget.disabledTextColor
+              : widget.textColor,
+        );
   }
 
   Color darkenColor(Color color) {

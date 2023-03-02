@@ -12,10 +12,9 @@ class StopWatchScreen extends StatefulWidget {
 class _StopWatchScreenState extends State<StopWatchScreen> {
   Timer? _timer;
   bool _isRunning = false;
-  Stopwatch _stopwatch = Stopwatch();
+  final Stopwatch _stopwatch = Stopwatch();
 
-  List<String> _lapTimes = [];
-  int _previousLapTime = 0;
+  final List<int> _lapTimes = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,17 +54,15 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     setState(() {
       _stopwatch.reset();
       _lapTimes.clear();
-      _previousLapTime = 0;
     });
   }
 
   void _lapTime() {
     setState(() {
       final elapsedTime = _stopwatch.elapsedMilliseconds;
-      final formattedLapTime =
-          formatElapsedTime(elapsedTime - _previousLapTime);
-      _lapTimes.add(formattedLapTime);
-      _previousLapTime = elapsedTime;
+      final previousTime = _lapTimes.isEmpty ? 0 : _lapTimes.last;
+      final latestLapTime = elapsedTime - previousTime;
+      _lapTimes.add(latestLapTime);
     });
   }
 
@@ -86,7 +83,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
       padding: const EdgeInsets.symmetric(vertical: 60),
       child: Center(
         child: Text(formatElapsedTime(_stopwatch.elapsedMilliseconds),
-            style: Theme.of(context).textTheme.headline2),
+            style: Theme.of(context).textTheme.headline1),
       ),
     );
   }
@@ -96,9 +93,11 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     return ListView.builder(
         itemCount: length,
         itemBuilder: ((context, index) {
+          final formattedLapTime =
+              formatElapsedTime(_lapTimes[length - index - 1]);
           return ListTile(
             leading: Text('Lap ${(length - index).toString()}'),
-            trailing: Text(_lapTimes[length - index - 1]),
+            trailing: Text(formattedLapTime),
           );
         }));
   }

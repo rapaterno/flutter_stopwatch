@@ -1,0 +1,15 @@
+{
+    "lap": "Lap",
+    "start": "Start",
+    "stop": "Stop",
+    "reset": "Reset",
+    "lapNumber": "Lap {lapNumber}",
+    "@lapNumber": {
+        "description": "Indicates the nth lap",
+        "placeholders": {
+            "lapNumber": {
+                "type" : "int"
+            }
+        }
+    }
+}

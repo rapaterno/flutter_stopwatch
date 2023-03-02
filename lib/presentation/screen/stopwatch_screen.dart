@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch/domain/bloc/bloc.dart';
 import 'package:flutter_stopwatch/injector.dart';
+import 'package:flutter_stopwatch/l10n/generated/stopwatch_localization.dart';
 import 'package:flutter_stopwatch/presentation/widgets/animated_feedback_button.dart';
 import 'package:flutter_stopwatch/res/colors.dart';
 import 'package:flutter_stopwatch/res/sizes.dart';
@@ -88,7 +89,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
                   FormatUtils.formatElapsedTime(lapTimes[length - index - 1]);
               return ListTile(
                 leading: Text(
-                  'Lap ${(length - index).toString()}',
+                  StopWatchLocalizations.of(context)!.lapNumber(length - index),
                   style: Theme.of(context).textTheme.subtitle1!,
                 ),
                 trailing: Text(
@@ -122,12 +123,12 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
 
         if (state is StopWatchRunning) {
           onPressed = () => getIt<StopWatchBloc>().add(const LapStopWatch());
-          text = 'Lap';
+          text = StopWatchLocalizations.of(context)!.lap;
         } else if (state.lapTimes.isEmpty && state.elapsedTime == 0) {
-          text = 'Lap';
+          text = StopWatchLocalizations.of(context)!.lap;
         } else {
           onPressed = () => getIt<StopWatchBloc>().add(const ResetStopWatch());
-          text = 'Reset';
+          text = StopWatchLocalizations.of(context)!.reset;
         }
 
         return AnimatedFeedbackButton(
@@ -149,12 +150,12 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         Color textColor;
         if (state is StopWatchRunning) {
           onPressed = () => getIt<StopWatchBloc>().add(const StopStopWatch());
-          text = 'Stop';
+          text = StopWatchLocalizations.of(context)!.stop;
           buttonColor = DubColors.lightRed;
           textColor = DubColors.red;
         } else {
           onPressed = () => getIt<StopWatchBloc>().add(const StartStopWatch());
-          text = 'Start';
+          text = StopWatchLocalizations.of(context)!.start;
           buttonColor = DubColors.lightGreen;
           textColor = DubColors.green;
         }

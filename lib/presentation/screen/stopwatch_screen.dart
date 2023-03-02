@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch/domain/bloc/bloc.dart';
 
+import '../utils/format_utils.dart';
+
 class StopWatchScreen extends StatefulWidget {
   const StopWatchScreen({super.key});
 
@@ -31,18 +33,6 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     );
   }
 
-  String formatElapsedTime(int milliseconds) {
-    int hundredths = (milliseconds / 10).truncate();
-    int seconds = (hundredths / 100).truncate();
-    int minutes = (seconds / 60).truncate();
-
-    String minuteStr = (minutes % 60).toString().padLeft(2, '0');
-    String secondStr = (seconds % 60).toString().padLeft(2, '0');
-    String hundredthsStr = (hundredths % 100).toString().padLeft(2, '0');
-
-    return '$minuteStr:$secondStr.$hundredthsStr';
-  }
-
   Widget buildElapsedTime() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 60),
@@ -50,7 +40,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         child: BlocBuilder<StopWatchBloc, StopWatchState>(
           builder: (context, state) {
             return Text(
-              formatElapsedTime(state.elapsedTime),
+              FormatUtils.formatElapsedTime(state.elapsedTime),
               style: Theme.of(context)
                   .textTheme
                   .headline1!
@@ -77,7 +67,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             itemCount: length,
             itemBuilder: ((context, index) {
               final formattedLapTime =
-                  formatElapsedTime(lapTimes[length - index - 1]);
+                  FormatUtils.formatElapsedTime(lapTimes[length - index - 1]);
               return ListTile(
                 leading: Text('Lap ${(length - index).toString()}'),
                 trailing: Text(formattedLapTime),

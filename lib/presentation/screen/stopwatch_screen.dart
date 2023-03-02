@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -82,8 +83,13 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 60),
       child: Center(
-        child: Text(formatElapsedTime(_stopwatch.elapsedMilliseconds),
-            style: Theme.of(context).textTheme.headline1),
+        child: Text(
+          formatElapsedTime(_stopwatch.elapsedMilliseconds),
+          style: Theme.of(context)
+              .textTheme
+              .headline1!
+              .copyWith(fontFeatures: [FontFeature.tabularFigures()]),
+        ),
       ),
     );
   }
@@ -110,12 +116,17 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
 
   Widget buildLeftButton() {
     return TextButton(
-        onPressed: (!_isRunning && _lapTimes.isEmpty)
+        onPressed: (!_isRunning &&
+                _lapTimes.isEmpty &&
+                _stopwatch.elapsedMilliseconds == 0)
             ? null
             : _isRunning
                 ? _lapTime
                 : _resetTimer,
-        child: Text(_isRunning || (!_isRunning && _lapTimes.isEmpty)
+        child: Text(_isRunning ||
+                (!_isRunning &&
+                    _lapTimes.isEmpty &&
+                    _stopwatch.elapsedMilliseconds == 0)
             ? 'Lap'
             : 'Reset'));
   }

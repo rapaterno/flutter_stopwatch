@@ -85,10 +85,9 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
       child: Center(
         child: Text(
           formatElapsedTime(_stopwatch.elapsedMilliseconds),
-          style: Theme.of(context)
-              .textTheme
-              .headline1!
-              .copyWith(fontFeatures: [FontFeature.tabularFigures()]),
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontFeatures: [
+            const FontFeature.tabularFigures(),
+          ]),
         ),
       ),
     );

@@ -14,7 +14,7 @@ TextStyle subtitle1 = const TextStyle(
 );
 
 TextStyle button = const TextStyle(
-  fontWeight: FontWeight.bold,
+  fontWeight: FontWeight.w500,
   fontSize: 18,
   color: DubColors.black,
 );
@@ -22,6 +22,7 @@ TextStyle button = const TextStyle(
 ThemeData theme = ThemeData(
   brightness: Brightness.light,
   backgroundColor: Colors.white,
+  colorScheme: ColorScheme.fromSwatch(accentColor: DubColors.gray),
   fontFamily: 'SfProDisplay',
   textTheme: TextTheme(
     headline1: headline1,

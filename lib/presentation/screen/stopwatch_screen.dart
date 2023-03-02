@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stopwatch/domain/bloc/bloc.dart';
+import 'package:flutter_stopwatch/injector.dart';
 import 'package:flutter_stopwatch/presentation/widgets/animated_feedback_button.dart';
 import 'package:flutter_stopwatch/res/colors.dart';
+import 'package:flutter_stopwatch/res/sizes.dart';
 
 import '../utils/format_utils.dart';
 
@@ -19,10 +21,9 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => StopWatchBloc(),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: BlocProvider.value(
+        value: getIt<StopWatchBloc>(),
+        child: SafeArea(
           child: Column(
             children: [
               const SizedBox(height: 50),
@@ -40,7 +41,10 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
 
   Widget buildElapsedTime() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 50),
+      margin: const EdgeInsets.symmetric(
+        vertical: 50,
+        horizontal: DubSizes.horizontalMargin,
+      ),
       height: 200,
       decoration: BoxDecoration(
           color: DubColors.lightGray, borderRadius: BorderRadius.circular(20)),
@@ -98,10 +102,16 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   }
 
   Widget buildControls() {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      buildLeftButton(),
-      buildRightButton(),
-    ]);
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: DubSizes.horizontalMargin,
+        vertical: DubSizes.verticalMargin,
+      ),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        buildLeftButton(),
+        buildRightButton(),
+      ]),
+    );
   }
 
   Widget buildLeftButton() {
@@ -111,14 +121,12 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         String text;
 
         if (state is StopWatchRunning) {
-          onPressed =
-              () => context.read<StopWatchBloc>().add(const LapStopWatch());
+          onPressed = () => getIt<StopWatchBloc>().add(const LapStopWatch());
           text = 'Lap';
         } else if (state.lapTimes.isEmpty && state.elapsedTime == 0) {
           text = 'Lap';
         } else {
-          onPressed =
-              () => context.read<StopWatchBloc>().add(const ResetStopWatch());
+          onPressed = () => getIt<StopWatchBloc>().add(const ResetStopWatch());
           text = 'Reset';
         }
 
@@ -140,14 +148,12 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         Color buttonColor;
         Color textColor;
         if (state is StopWatchRunning) {
-          onPressed =
-              () => context.read<StopWatchBloc>().add(const StopStopWatch());
+          onPressed = () => getIt<StopWatchBloc>().add(const StopStopWatch());
           text = 'Stop';
           buttonColor = DubColors.lightRed;
           textColor = DubColors.red;
         } else {
-          onPressed =
-              () => context.read<StopWatchBloc>().add(const StartStopWatch());
+          onPressed = () => getIt<StopWatchBloc>().add(const StartStopWatch());
           text = 'Start';
           buttonColor = DubColors.lightGreen;
           textColor = DubColors.green;

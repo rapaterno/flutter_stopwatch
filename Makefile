@@ -20,6 +20,3 @@ gen-l10n:
 build-di:
 	flutter pub get
 	flutter pub run build_runner build
-
-analyze-metrics:
-	flutter pub run dart_code_metrics:metrics lib

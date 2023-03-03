@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stopwatch/presentation/utils/color_utils.dart';
 import 'package:flutter_stopwatch/res/colors.dart';
 
 class AnimatedFeedbackButton extends StatefulWidget {
@@ -53,8 +54,9 @@ class _AnimatedFeedbackButtonState extends State<AnimatedFeedbackButton> {
       duration: animationDuration,
       curve: curve,
       decoration: BoxDecoration(
-          color:
-              _pressed ? darkenColor(widget.buttonColor) : widget.buttonColor,
+          color: _pressed
+              ? ColorUtils.darkenColor(widget.buttonColor)
+              : widget.buttonColor,
           borderRadius: BorderRadius.circular(30)),
       child: Center(
         child: buildButtonText(),
@@ -79,17 +81,6 @@ class _AnimatedFeedbackButtonState extends State<AnimatedFeedbackButton> {
               ? widget.disabledTextColor
               : widget.textColor,
         );
-  }
-
-  Color darkenColor(Color color) {
-    const obscureLevel = 5;
-    const darkenPercent = 1 - obscureLevel / 100;
-    return Color.fromARGB(
-      color.alpha,
-      (color.red * darkenPercent).round(),
-      (color.green * darkenPercent).round(),
-      (color.blue * darkenPercent).round(),
-    );
   }
 
   void _onTapDown() {

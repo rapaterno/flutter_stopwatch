@@ -36,9 +36,9 @@ class _AnimatedFeedbackButtonState extends State<AnimatedFeedbackButton> {
       width: baseDimension,
       child: Center(
         child: GestureDetector(
-          onTapDown: (_) => _onTapDown(),
-          onTapUp: (_) => _onTapUp(),
-          onTapCancel: () => _onTapCancel(),
+          onTapDown: widget.onPressed != null ? (_) => _onTapDown() : null,
+          onTapUp: widget.onPressed != null ? (_) => _onTapUp() : null,
+          onTapCancel: widget.onPressed != null ? () => _onTapCancel() : null,
           onTap: widget.onPressed,
           child: buildAnimatedButton(dimension),
         ),

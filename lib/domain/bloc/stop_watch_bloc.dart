@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:clock/clock.dart';
 
 import 'events/stop_watch_event.dart';
 import 'states/stop_watch_state.dart';
 
 class StopWatchBloc extends Bloc<StopWatchEvent, StopWatchState> {
-  final Stopwatch _stopwatch = Stopwatch();
+  final Stopwatch _stopwatch = clock.stopwatch();
   Timer? _timer;
 
   StopWatchBloc() : super(const StopWatchInitial()) {
@@ -50,9 +51,8 @@ class StopWatchBloc extends Bloc<StopWatchEvent, StopWatchState> {
 
   void _onLapped(LapStopWatch event, Emitter<StopWatchState> emit) {
     //Only allow lap if the stopwatch is running
+    final elapsedTime = _stopwatch.elapsedMilliseconds;
     if (state is StopWatchRunning) {
-      final elapsedTime = _stopwatch.elapsedMilliseconds;
-
       final latestLapTime = elapsedTime - state.previousLapTime;
       final lapTimes = state.lapTimes.toList();
       lapTimes.add(latestLapTime);

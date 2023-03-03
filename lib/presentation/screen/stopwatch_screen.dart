@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_stopwatch/injector.dart';
 import 'package:flutter_stopwatch/l10n/generated/stopwatch_localization.dart';
 import 'package:flutter_stopwatch/presentation/widgets/animated_feedback_button.dart';
 import 'package:flutter_stopwatch/res/colors.dart';
+import 'package:flutter_stopwatch/res/keys.dart';
 import 'package:flutter_stopwatch/res/sizes.dart';
 
 import '../utils/format_utils.dart';
@@ -22,6 +24,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key(StopWatchKeys.stopWatchScreen),
       body: BlocProvider.value(
         value: getIt<StopWatchBloc>(),
         child: SafeArea(
@@ -56,6 +59,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             builder: (context, state) {
               return Text(
                 FormatUtils.formatElapsedTime(state.elapsedTime),
+                key: const Key(StopWatchKeys.elapsedTime),
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
@@ -73,7 +77,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   Widget buildLapTimes() {
     return BlocBuilder<StopWatchBloc, StopWatchState>(
       buildWhen: (previous, current) {
-        return previous.lapTimes != current.lapTimes;
+        return !listEquals(previous.lapTimes, current.lapTimes);
       },
       builder: (context, state) {
         final lapTimes = state.lapTimes;
@@ -88,12 +92,15 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
               final formattedLapTime =
                   FormatUtils.formatElapsedTime(lapTimes[length - index - 1]);
               return ListTile(
+                key: const Key(StopWatchKeys.lapTile),
                 leading: Text(
                   StopWatchLocalizations.of(context)!.lapNumber(length - index),
+                  key: const Key(StopWatchKeys.lapNumber),
                   style: Theme.of(context).textTheme.subtitle1!,
                 ),
                 trailing: Text(
                   formattedLapTime,
+                  key: const Key(StopWatchKeys.lapTime),
                   style: Theme.of(context).textTheme.subtitle1!,
                 ),
               );
@@ -117,21 +124,27 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
 
   Widget buildLeftButton() {
     return BlocBuilder<StopWatchBloc, StopWatchState>(
+      // buildWhen: ,
       builder: (context, state) {
         Function()? onPressed;
         String text;
+        String key;
 
         if (state is StopWatchRunning) {
           onPressed = () => getIt<StopWatchBloc>().add(const LapStopWatch());
           text = StopWatchLocalizations.of(context)!.lap;
+          key = StopWatchKeys.lapButton;
         } else if (state.lapTimes.isEmpty && state.elapsedTime == 0) {
           text = StopWatchLocalizations.of(context)!.lap;
+          key = StopWatchKeys.lapButton;
         } else {
           onPressed = () => getIt<StopWatchBloc>().add(const ResetStopWatch());
           text = StopWatchLocalizations.of(context)!.reset;
+          key = StopWatchKeys.resetButton;
         }
 
         return AnimatedFeedbackButton(
+          key: Key(key),
           onPressed: onPressed,
           buttonText: text,
           buttonColor: DubColors.lightGray,
@@ -148,19 +161,24 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         String text;
         Color buttonColor;
         Color textColor;
+        String key;
+
         if (state is StopWatchRunning) {
           onPressed = () => getIt<StopWatchBloc>().add(const StopStopWatch());
           text = StopWatchLocalizations.of(context)!.stop;
           buttonColor = DubColors.lightRed;
           textColor = DubColors.red;
+          key = StopWatchKeys.stopButton;
         } else {
           onPressed = () => getIt<StopWatchBloc>().add(const StartStopWatch());
           text = StopWatchLocalizations.of(context)!.start;
           buttonColor = DubColors.lightGreen;
           textColor = DubColors.green;
+          key = StopWatchKeys.startButton;
         }
 
         return AnimatedFeedbackButton(
+          key: Key(key),
           onPressed: onPressed,
           buttonText: text,
           buttonColor: buttonColor,

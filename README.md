@@ -44,6 +44,7 @@ The stopwatch app has the following features:
 - Reset button: Allows the user to reset the stopwatch timer to 0.
 - Lap times: Displays a list of lap times when the user taps the "Lap" button.
 - Stopwatch timer: Displays the elapsed time in minutes, seconds, and milliseconds.
+- Stopwatch Clock: Visualizes the elapsed time in minutes, seconds, and the latest lap time
 
 ## Testing
 

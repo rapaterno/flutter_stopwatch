@@ -48,10 +48,10 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
       builder: (context, state) {
         return CustomPaint(
           // The text on a custom paint cannot be seen in widget testing
-          // so I added a key with the elapsed time instead
+          // so a key with the elapsed time will be used instead
           key: Key(StopWatchKeys.elapsedTime(state.elapsedTime)),
           size: const Size(300, 300),
-          painter: StopwatchClock(state.elapsedTime),
+          painter: StopwatchClock(state.elapsedTime, state.previousLapTime),
         );
       },
     );

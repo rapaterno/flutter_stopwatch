@@ -19,10 +19,10 @@ void main() {
 
       final screenTester = StopWatchScreenTester(tester);
       await screenTester.expectScreen();
-      screenTester.expectElapsedTime('00:00.00');
+      screenTester.expectElapsedTime(0);
       await screenTester.start();
 
-      await tester.pump(Duration(seconds: 5));
+      await tester.pump(const Duration(seconds: 5));
 
       await screenTester.stop();
 
@@ -31,7 +31,7 @@ void main() {
       await screenTester.reset();
       await tester.pumpAndSettle();
 
-      screenTester.expectElapsedTime('00:00.00');
+      screenTester.expectElapsedTime(0);
     });
     testWidgets('check reset and lap button behavior', (tester) async {
       app.main();
@@ -47,14 +47,14 @@ void main() {
 
       final screenTester = StopWatchScreenTester(tester);
       await screenTester.expectScreen();
-      screenTester.expectElapsedTime('00:00.00');
+      screenTester.expectElapsedTime(0);
 
       await screenTester.start();
 
       fakeAsync((async) async {
         async.elapse(const Duration(seconds: 1, milliseconds: 10));
 
-        screenTester.expectElapsedTime('01:00.01');
+        screenTester.expectElapsedTime(6010);
       });
       await tester.pumpAndSettle();
       await screenTester.stop();

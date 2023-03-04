@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,6 +6,7 @@ import 'package:flutter_stopwatch/domain/bloc/bloc.dart';
 import 'package:flutter_stopwatch/injector.dart';
 import 'package:flutter_stopwatch/l10n/generated/stopwatch_localization.dart';
 import 'package:flutter_stopwatch/presentation/widgets/animated_feedback_button.dart';
+import 'package:flutter_stopwatch/presentation/widgets/stopwatch_clock.dart';
 import 'package:flutter_stopwatch/res/colors.dart';
 import 'package:flutter_stopwatch/res/keys.dart';
 import 'package:flutter_stopwatch/res/sizes.dart';
@@ -44,33 +44,16 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   }
 
   Widget buildElapsedTime() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: 50,
-        horizontal: DubSizes.horizontalMargin,
-      ),
-      height: 200,
-      decoration: BoxDecoration(
-          color: DubColors.lightGray, borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 60),
-        child: Center(
-          child: BlocBuilder<StopWatchBloc, StopWatchState>(
-            builder: (context, state) {
-              return Text(
-                FormatUtils.formatElapsedTime(state.elapsedTime),
-                key: const Key(StopWatchKeys.elapsedTime),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontFeatures: [
-                  const FontFeature.tabularFigures(),
-                ]),
-              );
-            },
-          ),
-        ),
-      ),
+    return BlocBuilder<StopWatchBloc, StopWatchState>(
+      builder: (context, state) {
+        return CustomPaint(
+          // The text on a custom paint cannot be seen in widget testing
+          // so I added a key with the elapsed time instead
+          key: Key(StopWatchKeys.elapsedTime(state.elapsedTime)),
+          size: const Size(300, 300),
+          painter: StopwatchClock(state.elapsedTime),
+        );
+      },
     );
   }
 

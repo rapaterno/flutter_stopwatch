@@ -7,5 +7,5 @@ abstract class StopWatchKeys {
   static const String lapTile = 'lap tile';
   static const String lapTime = 'lap time';
   static const String lapNumber = 'lap number';
-  static const String elapsedTime = 'elapsed time';
+  static String elapsedTime(int milliseconds) => 'elapsed time $milliseconds';
 }

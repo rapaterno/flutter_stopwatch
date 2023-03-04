@@ -16,6 +16,9 @@ class StopWatchScreenTester {
 
   final _lapTileFinder = findKey(StopWatchKeys.lapTile);
 
+  Finder _elapsedTimeFinder(int milliseconds) =>
+      findKey(StopWatchKeys.elapsedTime(milliseconds));
+
   Future<void> stop() async {
     await tester.tap(_stopButtonFinder);
   }
@@ -61,8 +64,8 @@ class StopWatchScreenTester {
     expect(_resetButtonFinder, findsNothing);
   }
 
-  void expectElapsedTime(String elapsedTime) {
-    expect(find.text(elapsedTime), findsAtLeastNWidgets(1));
+  void expectElapsedTime(int elapsedTime) {
+    expect(_elapsedTimeFinder(elapsedTime), findsAtLeastNWidgets(1));
   }
 
   void expectElapsedTimeStarted() {
